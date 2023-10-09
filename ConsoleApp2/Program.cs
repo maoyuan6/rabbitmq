@@ -11,9 +11,9 @@ var mqConn = RabbitMQHelper.GetMQConnection();
 //创建通道
 using (var channel = mqConn.CreateModel())
 {
-    string exchangeName = "adminRouteExchange";//交换机名称
-    //创建一个交换机(交换机的名字，交换机的类型) fanout 为订阅发布模式
-    channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
+    string exchangeName = "adminTopicExchange";//交换机名称
+    //创建一个交换机(交换机的名字，交换机的类型) fanout 为订阅发布模式 
+    channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
     Console.WriteLine("交换机创建成功");
     //消息队列名称
     string queueName =Guid.NewGuid().ToString();
@@ -25,7 +25,7 @@ using (var channel = mqConn.CreateModel())
         autoDelete: false, //是否自动删除，前提是，至少有一个消费者连接到这个队列。当所有消费者都断开后才会自动删除
         arguments: null //设置队列的参数
     );
-    string routeKey = "key1"; //匹配的key
+    string routeKey = "key.a.*"; //匹配的key
     //将队列与交换机进行绑定
     channel.QueueBind(queueName, exchangeName, routeKey, null);
 

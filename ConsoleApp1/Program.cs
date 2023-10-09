@@ -8,11 +8,11 @@ var mqConn = RabbitMQHelper.GetMQConnection();
 //创建通道
 using (var channel = mqConn.CreateModel())
 {
-    string exchangeName = "adminRouteExchange";//交换机名称
+    string exchangeName = "adminTopicExchange";//交换机名称
     //创建一个交换机(交换机的名字，交换机的类型) fanout 为订阅发布模式
-    channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
+    channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
     Console.WriteLine("交换机创建成功");
-    string routeKey = "key2"; //匹配的key，
+    string routeKey = "key.a.b"; //匹配的key，
     //string queueName = "demo";
     ////声明一个队列
     //channel.QueueDeclare(

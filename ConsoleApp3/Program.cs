@@ -12,9 +12,9 @@ var mqConn = RabbitMQHelper.GetMQConnection();
 //创建通道
 using (var channel = mqConn.CreateModel())
 {
-    string exchangeName = "adminRouteExchange";//交换机名称
+    string exchangeName = "adminTopicExchange";//交换机名称
     //创建一个交换机(交换机的名字，交换机的类型) fanout 为订阅发布模式
-    channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
+    channel.ExchangeDeclare(exchangeName, ExchangeType.Topic);
     Console.WriteLine("交换机创建成功");
     //消息队列名称
     string queueName = Guid.NewGuid().ToString();
@@ -27,7 +27,7 @@ using (var channel = mqConn.CreateModel())
         arguments: null //设置队列的参数
     );
 
-    string routeKey = "key2"; //匹配的key
+    string routeKey = "key.b.*"; //匹配的key
     //将队列与交换机进行绑定
     channel.QueueBind(queueName, exchangeName, routeKey, null);
     //每次只能向消费者发送5条信息,再消费者未确认之前,不再向他发送信息
